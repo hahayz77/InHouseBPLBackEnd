@@ -86,10 +86,7 @@ io.on('connection', async (socket) => {
         io.emit('reportUpdate', reportRes);
       }
       return;
-    } catch (error) { 
-      io.emit('error', error);
-      return;
-    };
+    } catch (error) {throw{error} };
   })
 
 })

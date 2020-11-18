@@ -78,10 +78,11 @@ router.patch('/result', async(req, res)=>{
                   console.log("DISTRIBUIR PONTOS");// ---------------------------> DISTRUBUIR PONTOS AO USUÁRIO
 
 
-
+                const updateMaches = await Match.find({ finished: false }).sort({time: 'desc'});
                 res.json({
                   status: "reportok",
-                  mensagem: "Distribuir pontos!"
+                  mensagem: "Distribuir pontos!",
+                  updateMaches: updateMaches
                 })
               }
               else{
@@ -97,8 +98,51 @@ router.patch('/result', async(req, res)=>{
 
 
     else if(req.body.team === "B"){
-  
-    }
+      if(findReport.preresult.teama[0] === 0 && findReport.preresult.teama[1] === 0){
+        const updateMatchB = await Match.updateOne({_id: req.body.id}, 
+          {$set: {
+            "preresult.teama": preresultInt
+          } });
+        if(!updateMatchB){throw {error}};
+        console.log(updateMatchB);
+
+        res.status(200).json({
+          status: "awaitcompare",
+          mensagem: "Report feito com sucesso! Aguarde a comparação do resultado!" 
+        })
+        
+      }
+      else{ 
+            if(findReport.preresult.teama[0] === preresultInt[0] && findReport.preresult.teama[1] === preresultInt[1]){
+                     
+              const updateMatchB = await Match.updateOne({_id: req.body.id}, 
+                {$set: {
+                  "preresult.teamb": [preresultInt[0],preresultInt[1]],
+                  finished: true,
+                  result: [preresultInt[0],preresultInt[1]]
+                }})
+              
+                console.log("DISTRIBUIR PONTOS");// ---------------------------> DISTRUBUIR PONTOS AO USUÁRIO
+
+
+                const updateMaches = await Match.find().sort({time: 'desc'});
+                console.log("------------>");console.log(updateMaches);
+                res.json({
+                  status: "reportok",
+                  mensagem: "Distribuir pontos!",
+                  machesupdate: updateMaches
+                })
+            }
+            else{
+              const updateMatchA = await Match.updateOne({_id: req.body.id}, {$set: {"preresult.teamb": [0,0]} });
+                  if(!updateMatchA){throw {error};}
+                  res.json({
+                    status: "wrongresult",
+                    mensagem:"Resultados não conferem!"
+                  })
+            }
+      }
+  }
   } catch (error) {
     throw {error};
   }
