@@ -6,7 +6,7 @@ const Queue = require('../models/Queue');
 
 const matchInit = async () => {
     try {
-        const match = await Match.find({}).sort({time: 'desc'}).limit(10);
+        const match = await Match.find({ finished: false }).sort({time: 'desc'}).limit(10);
         return await match;
     } catch (err) {
         throw {error: err};
@@ -45,7 +45,7 @@ const matchUpdate = async () => {
         if(!deleteQueue){ throw { error: "Error Delete"} };
 
         const queueRes = await Queue.find({});
-        const matchRes = await Match.find({}).sort({time: 'desc'}).limit(5);
+        const matchRes = await Match.find({finished: false}).sort({time: 'desc'}).limit(5);
         const reportRes = await Match.findOne({ $and: [ { teams: { $in: teamShuffle } }, { finished: false } ] }).sort({time: 'desc'});
         return { queueRes, matchRes, reportRes };
 

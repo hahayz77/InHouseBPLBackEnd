@@ -33,7 +33,7 @@
 
 #### Problemas
 
-- Report.Init acaba enviado report para todos os usuários, assim como os erros.
+- functions/socketReport ->ReportInit acaba enviado report para todos os usuários, assim como os erros.
 - Não consegui enviar para um usuário por uma sala ou ID.
 - Tive que fazer o Report pelo express com a rota match REPORT e RESULT
 
