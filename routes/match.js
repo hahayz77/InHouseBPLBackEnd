@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 router.use(bodyParser.json());
 
 const Match = require('../models/match');
+const User = require('../models/user');
 
 router.get("/", async (req, res) => {
   try {
@@ -19,13 +20,7 @@ router.get("/", async (req, res) => {
 router.get("/report/:name", async (req, res) => {
   try {
     const findReport = await Match.findOne({ $and: [{ teams: { $in: [req.params.name] } }, { finished: false }] }).sort({ time: 'desc' });
-    if (!findReport) {
-      res.json({
-        status: "nomatch",
-        mensagem: "Nenhuma partida para reportar"
-      });
-      return;
-    }
+    if (!findReport) { throw {error: "nomatch"} };
     res.status(200).json({
       status: "reportmatch",
       mensagem: "Partida para reportar",
@@ -33,19 +28,34 @@ router.get("/report/:name", async (req, res) => {
       teams: findReport.teams,
       reported: findReport.reported,
       preresult: findReport.preresult
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: error,
-      mensagem: "Erro ao Reportar!"
     })
-    throw { error };
+  } catch (error) {
+    res.json({
+      error: error
+    })
   }
 })
 
 router.get("/update/:name", async () => {
-  res.send("Update Match e Report");
-  // const updateMaches = await Match.find({ finished: false }).sort({time: 'desc'});
+  try {
+    const updateMatches = await Match.find({finished: false}).sort({ time: 'desc' }).limit(5);
+    if(!updateMatches){throw {error: "UpdateMatches Error"}}
+  
+    const updateUser = await User.findOne({name: req.params.name});
+    if(!updateUser){throw {error: "UpdateUser Error"}}
+
+    res.json({
+      matches: updateMatches,
+      user: updateUser
+    })
+
+  } catch (error) {
+    res.json({
+      error: error,
+      mensagem: "GET Update Error!"
+    })
+  }
+
 })
 
 router.patch('/result', async (req, res) => {
@@ -55,8 +65,10 @@ router.patch('/result', async (req, res) => {
     preresultInt[1] = parseInt(req.body.preresult[1]);
     
     const findReport = await Match.findOne({ $and: [{ teams: { $in: [req.body.player] } }, { finished: false }] }).sort({ time: 'desc' });
-    if (!findReport) { throw { error } };
+    if (!findReport) { throw { error: "findReport" } };
 
+
+    // TEAM A REPORT --------------------------->
     if (req.body.team === "A") {
       if (findReport.preresult.teamb[0] === 0 && findReport.preresult.teamb[1] === 0) {
         const updateMatchA = await Match.updateOne({ _id: req.body.id },
@@ -65,12 +77,13 @@ router.patch('/result', async (req, res) => {
               "preresult.teama": preresultInt
             }
           })
-        if (!updateMatchA) { throw { error } }
+        if (!updateMatchA) { throw { error: "Update Match A 1" } }
 
         res.status(200).json({
           status: "awaitcompare",
           mensagem: "Report feito com sucesso! Aguarde a comparação do resultado!"
         })
+        return;
       }
       else if (findReport.preresult.teamb[0] === preresultInt[0] && findReport.preresult.teamb[1] === preresultInt[1]) {
 
@@ -82,18 +95,20 @@ router.patch('/result', async (req, res) => {
               result: [preresultInt[0], preresultInt[1]]
             }
           })
-          if (!updateMatchA) { throw { error } }
+          if (!updateMatchA) { throw { error: "Update Match A 2" } }
       }
       else {
         const updateMatchA = await Match.updateOne({ _id: req.body.id }, { $set: { "preresult.teamb": [0, 0] } });
-        if (!updateMatchA) { throw { error } }
+        if (!updateMatchA) { throw { error: "Update Match A 3" } }
         res.json({
           status: "wrongresult",
           mensagem: "Resultados não conferem!"
         })
+        return;
       }
     }
 
+    // TEAM B REPORT --------------------------->
     if (req.body.team === "B") {
       if (findReport.preresult.teama[0] === 0 && findReport.preresult.teama[1] === 0) {
         const updateMatchB = await Match.updateOne({ _id: req.body.id },
@@ -102,12 +117,13 @@ router.patch('/result', async (req, res) => {
               "preresult.teamb": preresultInt
             }
           })
-        if (!updateMatchB) { throw { error } }
+        if (!updateMatchB) { throw { error: "Update Match B 1" } }
         
         res.status(200).json({
           status: "awaitcompare",
           mensagem: "Report feito com sucesso! Aguarde a comparação do resultado!"
         })
+        return;
       }
       else if (findReport.preresult.teama[0] === preresultInt[0] && findReport.preresult.teama[1] === preresultInt[1]) {
         const updateMatchB = await Match.updateOne({ _id: req.body.id },
@@ -118,32 +134,53 @@ router.patch('/result', async (req, res) => {
               result: [preresultInt[0], preresultInt[1]]
             }
           })
+          if(!updateMatchB){throw {error: "Update Match B 2"}}
       }
       else {
         const updateMatchB = await Match.updateOne({ _id: req.body.id }, { $set: { "preresult.teama": [0, 0] } });
-        if (!updateMatchB) { throw { error } }
+        if (!updateMatchB) { throw { error: "Update Match B 3" } }
         res.json({
           status: "wrongresult",
           mensagem: "Resultados não conferem!"
         })
+        return;
       }
     }
 
-    console.log("DISTRIBUIR PONTOS");// --------------------------->
+    // Set User Points --------------------------->
+    var teamA = [], teamB = [];
+    for(var i=0; i<3; i++){
+      teamA.push(findReport.teams[i]);
+      teamB.push(findReport.teams[i+3]);
+    }
 
+    const calcPointsA = preresultInt[1] - preresultInt[0];
+    const setUserPointsA = await User.updateMany({name: {$in: teamA}},{
+      $inc: {
+         points: calcPointsA 
+      } 
+    })
+    if(!setUserPointsA){throw {error: "Error Set User Points A"}}
 
-    console.log("ATUALIZAR OS MATCHES");// ---------------------------> 
-    const updateMatches = await Match.find({finished: false}).sort({ time: 'desc' }).limit(5);
-    console.log(updateMatches);
+    const calcPointsB = preresultInt[0] - preresultInt[1];
+    const setUserPointsB = await User.updateMany({name: {$in: teamB}},{
+      $inc: {
+         points: calcPointsB 
+      } 
+    })
+    if(!setUserPointsB){throw {error: "Error Set User Points B"}}    
+
     res.json({
       status: "reportok",
-      mensagem: "Distribuir pontos!",
+      mensagem: "Pontos distribuídos aos players!",
       update: updateMatches
     })
 
 
   } catch (error) {
-    throw { error };
+    res.json({
+      error: error
+    })
   }
 });
 
