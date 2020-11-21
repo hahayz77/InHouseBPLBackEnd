@@ -36,7 +36,7 @@ router.get("/report/:name", async (req, res) => {
   }
 })
 
-router.get("/update/:name", async () => {
+router.get("/update/:name", async (req, res) => {
   try {
     const updateMatches = await Match.find({finished: false}).sort({ time: 'desc' }).limit(5);
     if(!updateMatches){throw {error: "UpdateMatches Error"}}
@@ -172,8 +172,7 @@ router.patch('/result', async (req, res) => {
 
     res.json({
       status: "reportok",
-      mensagem: "Pontos distribuídos aos players!",
-      update: updateMatches
+      mensagem: "Pontos distribuídos aos players!"
     })
 
 
