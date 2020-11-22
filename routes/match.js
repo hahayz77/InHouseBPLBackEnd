@@ -31,7 +31,8 @@ router.get("/report/:name", async (req, res) => {
     })
   } catch (error) {
     res.json({
-      error: error
+      status: 'error',
+      mensagem: "Sem partidas para Reportar!"
     })
   }
 })
@@ -81,7 +82,7 @@ router.patch('/result', async (req, res) => {
 
         res.status(200).json({
           status: "awaitcompare",
-          mensagem: "Report feito com sucesso! Aguarde a comparação do resultado!"
+          mensagem: "Reportado com sucesso! Aguarde a confirmação!"
         })
         return;
       }
@@ -102,7 +103,7 @@ router.patch('/result', async (req, res) => {
         if (!updateMatchA) { throw { error: "Update Match A 3" } }
         res.json({
           status: "wrongresult",
-          mensagem: "Resultados não conferem!"
+          mensagem: "Os resultados não conferem!"
         })
         return;
       }
@@ -121,7 +122,7 @@ router.patch('/result', async (req, res) => {
         
         res.status(200).json({
           status: "awaitcompare",
-          mensagem: "Report feito com sucesso! Aguarde a comparação do resultado!"
+          mensagem: "Reportadoo com sucesso! Aguarde a confirmação!"
         })
         return;
       }
@@ -172,7 +173,7 @@ router.patch('/result', async (req, res) => {
 
     res.json({
       status: "reportok",
-      mensagem: "Pontos distribuídos aos players!"
+      mensagem: "Report Finalizado!"
     })
 
 
