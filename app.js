@@ -9,9 +9,8 @@ require('dotenv').config();
 
 
 
-const { queueUpdate, queueInit } = require('./functions/socketQueue')
+const { queueUpdate, queueInit, queueDelete } = require('./functions/socketQueue')
 const { matchInit, matchUpdate } = require('./functions/socketMatch')
-const { reportInit, reportResult } = require('./functions/socketReport')
 
 
 
@@ -63,17 +62,12 @@ io.on('connection', async (socket) => {
   const match = await matchInit();
   io.emit('matchInit', match);
 
-  // socket.on('reportInit', async (userinit) => {
-  //     const findReport = await reportInit(userinit);
-  //     io.emit('reportUpdate', findReport);
-  //     return;
-  //   }  
-  // )
-
-  socket.on('report', async(report)=>{
-      console.log(report);
-  })
     
+  socket.on('queueDelete', async(playerId) => {
+    const queue = await queueDelete(playerId);
+    io.emit('queueUpdate', queue);
+  })
+
   socket.on('queueUpdate', async (player) => {
     try {
       const { count, queue } = await queueUpdate(player);

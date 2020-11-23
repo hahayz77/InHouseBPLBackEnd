@@ -28,7 +28,7 @@ router.post('/register', function (req, res) {
           const newUser = new User({
             email: req.body.email,
             name: req.body.name,
-            main: 'none',
+            main: 'Jade',
             report: 'none',
             password: hash,
             points: 0,
@@ -46,8 +46,9 @@ router.post('/register', function (req, res) {
                 id: newUser.id,
                 email: newUser.email,
                 name: newUser.name,
-                main: 'none',
-                report: 'none',    
+                main: newUser.main,
+                password: hash,
+                report: newUser.report,    
                 ponints: newUser.points,
                 status: newUser.status
               });

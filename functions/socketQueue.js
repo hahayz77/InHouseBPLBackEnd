@@ -53,4 +53,18 @@ const queueUpdate = async (player) => {
 
 }
 
-module.exports = { queueUpdate, queueInit }
+const queueDelete = async (playerId) => {
+    try {
+        const deleteQueue = await Queue.deleteOne({ id: playerId });
+        if (!deleteQueue) { throw {error: "NoUser"}}
+        console.log(playerId + " saiu da fila!");
+        
+        const queue = await Queue.find({})
+        return await queue;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = { queueUpdate, queueInit, queueDelete }
