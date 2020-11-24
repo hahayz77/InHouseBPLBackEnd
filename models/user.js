@@ -22,8 +22,11 @@ const UserSchema = new mongoose.Schema({
   level: {
     type: String
   },
-  status: {
-    type: Object
+  wins: {
+    type: Number
+  },
+  loses: {
+    type: Number
   },
   points: {
       type: Number,

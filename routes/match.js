@@ -155,21 +155,47 @@ router.patch('/result', async (req, res) => {
       teamB.push(findReport.teams[i+3]);
     }
 
-    const calcPointsA = preresultInt[1] - preresultInt[0];
-    const setUserPointsA = await User.updateMany({name: {$in: teamA}},{
-      $inc: {
-         points: calcPointsA 
-      } 
-    })
-    if(!setUserPointsA){throw {error: "Error Set User Points A"}}
+    const calcPointsA = preresultInt[0] - preresultInt[1];
+    if(calcPointsA > 0){
+      const setUserPointsA = await User.updateMany({name: {$in: teamA}},{
+        $inc: {
+           points: calcPointsA,
+           wins: 1
+        } 
+      })
+      if(!setUserPointsA){throw {error: "Error Set User Points A"}}
+    }
+    else{
+      const setUserPointsA = await User.updateMany({name: {$in: teamA}},{
+        $inc: {
+           points: calcPointsA,
+           loses: 1
+        } 
+      })
+      if(!setUserPointsA){throw {error: "Error Set User Points A"}}
+    }
 
-    const calcPointsB = preresultInt[0] - preresultInt[1];
-    const setUserPointsB = await User.updateMany({name: {$in: teamB}},{
-      $inc: {
-         points: calcPointsB 
-      } 
-    })
-    if(!setUserPointsB){throw {error: "Error Set User Points B"}}    
+
+    const calcPointsB = preresultInt[1] - preresultInt[0];
+    if(calcPointsB > 0){
+      const setUserPointsB = await User.updateMany({name: {$in: teamB}},{
+        $inc: {
+           points: calcPointsB,
+           wins: 1
+        } 
+      })
+      if(!setUserPointsB){throw {error: "Error Set User Points B"}}
+    }
+    else{
+      const setUserPointsB = await User.updateMany({name: {$in: teamB}},{
+        $inc: {
+           points: calcPointsB,
+           loses: 1
+        } 
+      })
+      if(!setUserPointsB){throw {error: "Error Set User Points B"}}
+    }
+        
 
     res.json({
       status: "reportok",

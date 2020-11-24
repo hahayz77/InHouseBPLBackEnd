@@ -32,11 +32,8 @@ router.post('/register', function (req, res) {
             level: "player",
             password: hash,
             points: 0,
-            status: {
-              wins: 0,
-              loses: 0,
-              matches: 0
-            }
+            wins: 0,
+            loses: 0
           });
         
           newUser.save(function(err){
@@ -47,10 +44,10 @@ router.post('/register', function (req, res) {
                 email: newUser.email,
                 name: newUser.name,
                 main: newUser.main,
-                password: hash,
                 level: newUser.level,    
                 ponints: newUser.points,
-                status: newUser.status
+                wins: newUser.wins,
+                loses: newUser.loses
               });
             } else {
               res.status(500).json({ mensagem: "Erro interno do servidor!", erro: err});
@@ -81,7 +78,8 @@ router.post('/login', function (req, res) {
             main: foundUser.main,
             level: foundUser.level,
             points: foundUser.points,
-            status: foundUser.status
+            wins: foundUser.wins,
+            loses: foundUser.loses
           })
         }
         else{
