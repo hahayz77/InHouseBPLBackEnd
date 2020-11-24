@@ -26,7 +26,7 @@ const matchScheema = new mongoose.Schema({
     expire_at: {
         type: Date, 
         default: Date.now, 
-        expires: 604800
+        expires: 259200
     }
 })
 

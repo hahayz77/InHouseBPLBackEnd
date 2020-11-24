@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
   main: {
     type: String
   },
-  report: {
+  level: {
     type: String
   },
   status: {

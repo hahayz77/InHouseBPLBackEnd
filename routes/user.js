@@ -29,7 +29,7 @@ router.post('/register', function (req, res) {
             email: req.body.email,
             name: req.body.name,
             main: 'Jade',
-            report: 'none',
+            level: "player",
             password: hash,
             points: 0,
             status: {
@@ -48,7 +48,7 @@ router.post('/register', function (req, res) {
                 name: newUser.name,
                 main: newUser.main,
                 password: hash,
-                report: newUser.report,    
+                level: newUser.level,    
                 ponints: newUser.points,
                 status: newUser.status
               });
@@ -79,7 +79,7 @@ router.post('/login', function (req, res) {
             id: foundUser.id,
             name: foundUser.name,
             main: foundUser.main,
-            report: foundUser.report,
+            level: foundUser.level,
             points: foundUser.points,
             status: foundUser.status
           })
