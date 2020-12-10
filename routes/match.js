@@ -17,6 +17,22 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/problem/:name", async (req,res) => {
+  try {
+    const findReport = await Match.deleteOne({ $and: [{ teams: { $in: [req.params.name] } }, { finished: false }] }).sort({ time: 'desc' });
+    if(!findReport){throw {error: "Error FindReport"}}
+    else{
+      res.status(200).json({
+        status: "matchproblem",
+        mensagem: "Match Cancelado!"
+      })
+    }
+    
+  } catch (error) {
+    res.send(error)
+  }
+});
+
 router.get("/report/:name", async (req, res) => {
   try {
     const findReport = await Match.findOne({ $and: [{ teams: { $in: [req.params.name] } }, { finished: false }] }).sort({ time: 'desc' });
