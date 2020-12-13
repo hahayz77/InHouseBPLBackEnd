@@ -95,13 +95,14 @@ router.post('/login', function (req, res) {
   })
 })
 
-
-router.patch('/', function (req, res) {
-    res.send("ROTA PATCH USER");
-});
-
-router.get('/', function (req, res) {
-  res.json({name: "ROTA GET USER"})
+router.get('/ranking', async(req, res)=>{
+    try {
+      const ranking = await User.find({}, {_id: 0, name: 1, main: 1, points: 1}).sort({ points: 'desc' });
+      if(!ranking){throw {error: "Error Ranking"}}
+      res.json(ranking);
+    } catch (error) {
+      res.json({ error });
+    }
 });
 
 
