@@ -14,7 +14,7 @@ const { matchInit, matchUpdate } = require('./functions/socketMatch')
 
 
 
-app.use(cors({origin: 'https://battleritebrasil.netlify.app'}));
+app.use(cors());
 
 var PORT = process.env.PORT || 8081;
 

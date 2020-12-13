@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
 router.use(bodyParser.json());
+router.use(cors());
 
 const Match = require('../models/match');
 const User = require('../models/user');

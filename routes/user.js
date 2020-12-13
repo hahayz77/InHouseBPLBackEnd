@@ -6,6 +6,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
 router.use(bodyParser.json());
+router.use(cors());
 
 router.post('/register', function (req, res) {
 
