@@ -4,6 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose')
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 router.use(bodyParser.json());
 router.use(cors());

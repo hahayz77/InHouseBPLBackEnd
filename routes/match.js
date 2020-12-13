@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 router.use(bodyParser.json());
 router.use(cors());
