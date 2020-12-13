@@ -16,7 +16,7 @@ const { matchInit, matchUpdate } = require('./functions/socketMatch')
 
 app.use(cors());
 
-var PORT = process.env.PORT || 8081;
+var PORT = 8081;
 
 // ####################################################### ROUTES
 
