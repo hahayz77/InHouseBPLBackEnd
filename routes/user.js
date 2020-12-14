@@ -107,5 +107,28 @@ router.get('/ranking', async(req, res)=>{
     }
 });
 
+router. get('/main/:id/:champion', async(req,res)=>{
+    try {
+      const champion = req.params.champion;
+      const id = req.params.id;
+
+      const userUpdateMain = await User.updateOne({_id: id }, {
+        $set: {
+          main: champion
+        }
+      })
+      if (!userUpdateMain){ throw {error: "Error userUpdateMain"}}
+
+      res.json({
+        mensagem: "Main alterado!",
+        status: "mainchampionok"
+      })
+    } catch (error) {
+      res.json({
+        mensagem: error,
+        erro: userUpdateMain
+      });
+    }
+});
 
 module.exports = router;
