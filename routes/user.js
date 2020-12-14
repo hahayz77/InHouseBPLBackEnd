@@ -119,9 +119,13 @@ router. get('/main/:id/:champion', async(req,res)=>{
       })
       if (!userUpdateMain){ throw {error: "Error userUpdateMain"}}
 
+      const ranking = await User.find({}, {_id: 0, name: 1, main: 1, points: 1}).sort({ points: 'desc' });
+      if(!ranking){throw {error: "Error Ranking"}}
+
       res.json({
         mensagem: "Main alterado!",
-        status: "mainchampionok"
+        status: "mainchampionok",
+        ranking: ranking
       })
     } catch (error) {
       res.json({
