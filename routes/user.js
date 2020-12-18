@@ -7,10 +7,7 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 
 router.use(bodyParser.json());
-router.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
-});
+router.use(cors());
 
 router.post('/register', function (req, res) {
 

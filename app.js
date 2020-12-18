@@ -15,6 +15,11 @@ const { matchInit, matchUpdate } = require('./functions/socketMatch')
 
 
 app.use(cors());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 
 var PORT = process.env.PORT || 8081;
 
