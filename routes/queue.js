@@ -8,7 +8,10 @@ const Queue = require('../models/Queue');
 const User = require('../models/user');
 
 router.use(bodyParser.json());
-router.use(cors());
+router.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 router.get('/', function (req, res) {
   Queue.find(function(err, allQueue){

@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 router.use(bodyParser.json());
-router.use(cors());
+router.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 const Match = require('../models/match');
 const User = require('../models/user');
