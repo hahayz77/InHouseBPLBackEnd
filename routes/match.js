@@ -9,6 +9,7 @@ router.use(cors());
 
 const Match = require('../models/match');
 const User = require('../models/user');
+const Problem = require('../models/problem');
 
 router.get("/", async (req, res) => {
   try {
@@ -19,17 +20,86 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/problem/:name", async (req,res) => {
+router.post("/problem/", async (req,res) => {
   try {
-    const findReport = await Match.deleteOne({ $and: [{ teams: { $in: [req.params.name] } }, { finished: false }] }).sort({ time: 'desc' });
-    if(!findReport){throw {error: "Error FindReport"}}
-    else{
-      res.status(200).json({
-        status: "matchproblem",
-        mensagem: "Match Cancelado!"
+    const player = req.body.player;
+    const match = req.body.match;
+    const report = req.body.report;
+    const players = [];
+
+    const findProblem = await Problem.findOne({ match_id: match._id });
+    if(!findProblem){
+      players.push(player);
+
+      const newProblem = new Problem({
+        players: players,
+        match_id: match._id,
+        problem_type: report,
+        problem_result: false
       })
-    }
-    
+
+      newProblem.save(function(err){
+        if (!err){
+
+            res.status(201).json({
+            mensagem: "Problema reportado, aguarde outro player!",
+            status: "problem_await"
+          })
+
+        } else {
+          
+          res.status(500).json({ mensagem: "Erro interno do servidor!", erro: err});
+
+        }
+      })
+
+    } else{
+      
+        if(findProblem.problem_result === true){
+          
+          res.status(201).json({
+            mensagem: "Problema já havia sido reportado!",
+            status: "problem_areadyreported"
+          })
+          return;
+        }
+
+        if(player !== findProblem.players[0]){
+          
+          let final_players = findProblem.players;
+          final_players.push(player);
+
+          const problemUpdate = await Problem.updateOne({ match_id: match._id },
+            {
+              $set: {
+                problem_result: true,
+                players: final_players
+              }
+            })
+            if(!problemUpdate){throw {error: "Error problemUpdate"}}
+
+            res.status(201).json({
+              mensagem: "Problema reportado com sucesso!",
+              status: "problem_confirmed"
+            })
+          
+        } else {
+
+          const problemUpdate = await Problem.updateOne({ match_id: match._id },
+            {
+              $set: {
+                problem_type: report
+              }
+            })
+            if(!problemUpdate){throw {error: "Error problemUpdate same player"}}
+
+            res.status(200).json({
+              mensagem: "Problema reportado novamente!",
+              status: "problem_again"
+            })
+
+          } 
+      }     
   } catch (error) {
     res.send(error)
   }
@@ -228,7 +298,7 @@ router.patch('/result', async (req, res) => {
   }
 });
 
-router.delete("/delete/all/alucard123", async (req, res) => {
+router.delete("/delete/all/298dhdko187762hhnnxoay0927", async (req, res) => {
   try {
     const deleteMatches = await Match.deleteMany({});
     res.status(200).send(await deleteMatches);
