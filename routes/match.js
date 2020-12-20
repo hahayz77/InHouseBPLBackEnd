@@ -78,7 +78,7 @@ router.post("/problem/", async (req,res) => {
             })
             if(!problemUpdate){throw {error: "Error problemUpdate"}}
 
-            const findReport = await Match.deleteOne({ match_id: match._id })
+            const findReport = await Match.deleteOne({ $and: [{ teams: { $in: [req.params.name] } }, { finished: false }] }).sort({ time: 'desc' });
             if(!findReport){throw {error: "Error FindReport"}}
 
             res.status(201).json({
