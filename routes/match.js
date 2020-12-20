@@ -78,6 +78,9 @@ router.post("/problem/", async (req,res) => {
             })
             if(!problemUpdate){throw {error: "Error problemUpdate"}}
 
+            const findReport = await Match.deleteOne({ match_id: match._id })
+            if(!findReport){throw {error: "Error FindReport"}}
+
             res.status(201).json({
               mensagem: "Problema reportado com sucesso!",
               status: "problem_confirmed"
