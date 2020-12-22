@@ -27,7 +27,8 @@
 ------
 
 ### O que falta fazer
-- [ x ] Reportar erro na partida não finalizado;
+- [ ] Reportar erro na partida não finalizado;
+- [ ] Retirar IDs da queue;
 - [ ] Histórico de partidas;
 - [ ] Substituir name por objeto no emit do front end para fazer o matchmaking;
 - [ ] Jogadores com pontos negativos tem redução na subtração dos pontos para estimular a pontuação positiva no ranking;
