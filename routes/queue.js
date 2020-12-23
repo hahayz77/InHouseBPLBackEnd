@@ -23,7 +23,9 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function(req, res){
-  User.findOne({name: req.body.name}, function(err, foundUser){  
+  const name = req.body.name;
+  
+  User.findOne({name: name}, function(err, foundUser){  
     if(foundUser){
       const newQueue = new Queue({
         id: foundUser.id,
@@ -40,12 +42,10 @@ router.post('/', function(req, res){
                   res.status(200).json({
                     menssagem: "Entrou na fila!",
                     name: newQueue.name,
-                    points: newQueue.points,
-                    time: newQueue.time,
-                    expire_at: newQueue.expire_at
+                    points: newQueue.points
                   })
                 } else {
-                  res.status(500).send("Erro interno do Servidor!" + err);
+                  res.status(500).send("Erro interno: queuePOST001" + err);
                 }
               })
             }
@@ -55,7 +55,7 @@ router.post('/', function(req, res){
           })
         }
         else if(err){
-          res.status(500).send("Erro interno do Servidor!" + err);
+          res.status(500).send("Erro interno: queuePOST002" + err);
         }
         else{
           newQueue.save(function(err){
@@ -63,19 +63,17 @@ router.post('/', function(req, res){
               res.status(200).json({
                 menssagem: "Entrou na fila!",
                 name: newQueue.name,
-                points: newQueue.points,
-                time: newQueue.time,
-                expire_at: newQueue.expire_at
+                points: newQueue.points
               })
             } else {
-              res.status(500).send("Erro interno do Servidor!" + err);
+              res.status(500).send("Erro interno: queuePOST003" + err);
             }
           })
         }
       });
     }
     else if(err){
-      res.status(500).send("Erro interno do Servidor!" + err);
+      res.status(500).send("Erro interno: queuePOST003" + err);
     }
     else{
       res.status(400).send("Usuário não encontrado")
@@ -84,21 +82,18 @@ router.post('/', function(req, res){
   })
 })
 
-router.patch('/', function(req, res){
-  res.send({
-    menssagem: 'Rota PATCH QUEUE criada com sucesso!'
-  });
-});
 
-router.delete('/one/:id', function(req, res){
-  const id = req.params.id;
-  Queue.deleteOne({id: id}, function(err){
-      if (!err){
-        res.status(200).send(id + " Retirado da Fila")
-      } else {
-        res.send(err);
-      }
-    })
+router.delete('/one/:name', function(req, res){
+  try {
+    const name = req.params.name;
+
+    const deleteOne = Queue.deleteOne({id: name}, err);
+    if(err) {throw {error: "Error delete One!"}}
+    res.status(200).send(id + " Foi retirado da Fila por " + "!");
+  } catch (error) {
+    res.json({mensagem: "Erro delete One route!"})
+  }
+
 });
 
 router.delete('/all', async (req, res) => {
@@ -110,7 +105,7 @@ router.delete('/all', async (req, res) => {
         res.send(deleteAll);
       }
       else{
-        res.send("Erro")
+        res.send("Erro");
       }
     })
 })

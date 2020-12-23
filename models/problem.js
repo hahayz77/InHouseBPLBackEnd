@@ -1,10 +1,6 @@
 const mongoose = require('../database/mongodb');
 
 const ProblemSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    unique: true
-  },
   players: {
       type: Array
   },
@@ -17,6 +13,9 @@ const ProblemSchema = new mongoose.Schema({
   },
   problem_result:{
         type: Boolean
+  },
+  teams:{
+    type: Array
   },
   time: {
       type: Date,

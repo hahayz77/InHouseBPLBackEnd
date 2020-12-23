@@ -15,12 +15,12 @@ const queueInit = async () => {
 
 const queueUpdate = async (player) => {
     try {
-        const matchFind = await Match.findOne({ $and: [ { teams: { $in: [ player.name ] } }, { finished: false } ] }).sort({time: 'desc'});
+        const matchFind = await Match.findOne({ $and: [ { teams: { $in: [ player ] } }, { finished: false } ] }).sort({time: 'desc'});
         if(matchFind){
             throw {error: "Você ainda tem uma partida em andamento!"};
         }
         else{
-            const foundUser = await User.findOne({ name: player.name });
+            const foundUser = await User.findOne({ name: player });
                 if (!foundUser) {
                 console.log("Usuário não encontrado");
                 return;

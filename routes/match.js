@@ -23,18 +23,19 @@ router.get("/", async (req, res) => {
 router.post("/problem/", async (req,res) => {
   try {
     const player = req.body.player;
-    const match = req.body.match;
     const report = req.body.report;
+    const problem = req.body.problem;
     const players = [];
 
-    const findProblem = await Problem.findOne({ match_id: match._id });
+    const findProblem = await Problem.findOne({ match_id: report.id });
     if(!findProblem){
       players.push(player);
 
       const newProblem = new Problem({
         players: players,
-        match_id: match._id,
-        problem_type: report,
+        match_id: report.id,
+        teams: report.teams,
+        problem_type: problem,
         problem_result: false
       })
 
@@ -48,7 +49,7 @@ router.post("/problem/", async (req,res) => {
 
         } else {
           
-          res.status(500).json({ mensagem: "Erro interno do servidor!", erro: err});
+          res.status(500).json({ mensagem: "Erro interno do servidor problem001!", erro: err});
 
         }
       })
@@ -69,7 +70,7 @@ router.post("/problem/", async (req,res) => {
           let final_players = findProblem.players;
           final_players.push(player);
 
-          const problemUpdate = await Problem.updateOne({ match_id: match._id },
+          const problemUpdate = await Problem.updateOne({ match_id: report.id },
             {
               $set: {
                 problem_result: true,
@@ -78,20 +79,21 @@ router.post("/problem/", async (req,res) => {
             })
             if(!problemUpdate){throw {error: "Error problemUpdate"}}
 
-            const deleteMatch = await Match.deleteOne({ $and: [{ teams: { $in: [req.params.name] } }, { finished: false }] }).sort({ time: 'desc' });
+            const deleteMatch = await Match.deleteOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] }).sort({ time: 'desc' });
             if(!deleteMatch){throw {error: "Error deleteMatch"}}
 
             res.status(201).json({
               mensagem: "Problema reportado com sucesso!",
-              status: "problem_confirmed"
+              status: "problem_confirmed",
+              mongo: deleteMatch
             })
           
         } else {
 
-          const problemUpdate = await Problem.updateOne({ match_id: match._id },
+          const problemUpdate = await Problem.updateOne({ match_id: report.id },
             {
               $set: {
-                problem_type: report
+                problem_type: problem
               }
             })
             if(!problemUpdate){throw {error: "Error problemUpdate same player"}}
