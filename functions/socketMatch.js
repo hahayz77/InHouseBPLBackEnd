@@ -19,19 +19,26 @@ const matchUpdate = async () => {
         const players = await Queue.find({}).sort({time: 'asc'}).limit(6);
         if(!players){ throw {error : "Find Error!"}};
 
-        let teamShuffle = [];
-        for( i=0 ; i < 6 ; i++ ){
-            teamShuffle.push(players[i].name);
-        }
+        let objShuffle = [];
+        let arrayShuffle = [];
 
         async function shuffle(o) {
             for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
             return o;
         }
-        shuffle(teamShuffle);
+        // objShuffle -> Matchmaking
+        for( i=0 ; i < 6 ; i++ ){
+            objShuffle.push({name: players[i].name, main: players[i].main, points: players[i].points});
+        }
+        shuffle(objShuffle);
+
+        // array Shuffle -> Mongodb
+        for( i=0 ; i < 6 ; i++ ){
+            arrayShuffle.push(objShuffle[i].name);
+        }
 
         const newMatch = new Match({
-            teams: teamShuffle,
+            teams: arrayShuffle,
             finished: false,
             reported: "false",
             result: [0, 0],
@@ -41,12 +48,12 @@ const matchUpdate = async () => {
         const saveMatch = await newMatch.save();
         if(!saveMatch){ throw { error: "Error SaveMatch"} };
 
-        const deleteQueue = await Queue.deleteMany({ name: { $in: teamShuffle } });
+        const deleteQueue = await Queue.deleteMany({ name: { $in: arrayShuffle } });
         if(!deleteQueue){ throw { error: "Error Delete"} };
 
         const queueRes = await Queue.find({});
         const matchRes = await Match.find({finished: false}).sort({time: 'desc'}).limit(5);
-        const reportRes = await Match.findOne({ $and: [ { teams: { $in: teamShuffle } }, { finished: false } ] }).sort({time: 'desc'});
+        const reportRes = await Match.findOne({ $and: [ { teams: { $in: arrayShuffle } }, { finished: false } ] }).sort({time: 'desc'});
         return { queueRes, matchRes, reportRes };
 
     } catch (error) {

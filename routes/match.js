@@ -313,4 +313,55 @@ router.delete("/delete/all/298dhdko187762hhnnxoay0927", async (req, res) => {
   }
 })
 
+router.post("/setpoints", async(req, res)=>{
+  try {
+    const team = req.body.team;
+    const points = req.body.points;
+    const wins = req.body.wins;
+    const loses = req.body.loses;
+
+    const setUserPoints = await User.updateMany({name: {$in: team}},{
+      $inc: {
+         points: points,
+         wins: wins,
+         loses: loses
+      } 
+    })
+    if(!setUserPoints){throw {error: "User set points"}}
+
+    res.status(200).json({
+      status: "OK SetUser Points",
+      mensagem: setUserPoints
+    })
+  } catch (error) {
+      res.status(500).json({
+        status: "ERROR SETUSERPOINTS",
+        mensagem: error
+      })
+  }
+})
+
+router.post("/resetall", async(req,res)=>{
+  try {
+    const setUserPoints = await User.updateMany({},{
+      $set: {
+         points: 0,
+         wins: 0,
+         loses: 0
+      } 
+    })
+    if(!setUserPoints){throw {error: "User set points"}}
+
+    res.status(200).json({
+      status: "Reset Points",
+      mensagem: setUserPoints
+    })
+  } catch (error) {
+    res.status(500).json({
+      status: "ERROR resetPoints",
+      mensagem: error
+    })
+  }
+})
+
 module.exports = router;

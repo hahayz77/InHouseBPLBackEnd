@@ -27,12 +27,12 @@
 ------
 
 ### O que falta fazer
-- [ ] Reportar erro na partida não finalizado;
-- [ ] Retirar IDs da queue;
+- [x] Reportar erro na partida não finalizado;
+- [x] Retirar IDs da queue;
+- [x] Substituir name por objeto no emit do front end para fazer o matchmaking;
 - [ ] Histórico de partidas;
-- [ ] Substituir name por objeto no emit do front end para fazer o matchmaking;
 - [ ] Jogadores com pontos negativos tem redução na subtração dos pontos para estimular a pontuação positiva no ranking;
-- [ ] Opções de Matchmaking -> Winrate + random, Pontos + random;
+- [ ] Opções de Matchmaking -> trigger por média de resultado dos matches anteriores;
 
 ### Problemas
 
