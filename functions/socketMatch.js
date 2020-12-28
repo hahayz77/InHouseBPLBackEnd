@@ -83,12 +83,8 @@ const matchUpdate = async () => {
                 resShuffle[2]=objShuffle[compsDif1[0][2]];
                 resShuffle[3]=objShuffle[compsDif1[0][3]];
                 resShuffle[4]=objShuffle[compsDif1[0][4]];
-                resShuffle[5]=objShuffle[compsDif1[0][5]];
-                // arrayShuffle -> Mongodb
-                for( i=0 ; i < 6 ; i++ ){
-                    arrayShuffle.push(resShuffle[i].name);
-                }
-                return arrayShuffle;
+                resShuffle[5]=objShuffle[compsDif1[0][5]];                
+                return resShuffle;
             }
             else{
                 shuffle(compsDif2);
@@ -100,23 +96,23 @@ const matchUpdate = async () => {
                 resShuffle[3]=objShuffle[compsDif2[0][3]];
                 resShuffle[4]=objShuffle[compsDif2[0][4]];
                 resShuffle[5]=objShuffle[compsDif2[0][5]];
-                // arrayShuffle -> Mongodb
-                for( i=0 ; i < 6 ; i++ ){
-                    arrayShuffle.push(resShuffle[i].name);
-                }
-                return arrayShuffle;
+                return resShuffle;
             }
         }
         
-        var d = 1;
+        // Verificar comps de partidas anteriores
         let noRepeat = false;
         while(noRepeat === false){
             matchShuffle = await teamShuffle();
-            d++;
             if(comp !== pastMatch_1 && comp !== pastMatch_2){
                 noRepeat = true;
             }
         };
+
+        // arrayShuffle -> Mongodb
+        for( i=0 ; i < 6 ; i++ ){
+            arrayShuffle.push(matchShuffle[i].name);
+        }
 
         const newMatch = new Match({
             teams: matchShuffle,
