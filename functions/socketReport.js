@@ -6,11 +6,9 @@ const reportInit = async (userinit) => {
     try {
         const findReport = await Match.findOne({ $and: [ { teams: { $in: [ userinit.name ] } }, { finished: false } ] }).sort({time: 'desc'});
         if(!findReport){
-            console.log(findReport);
             throw {error: "Erro ao reportar 1"};
         }
         else if(findReport === null){
-            console.log(findReport)
             throw {error: "Erro ao reportar 2"};
         }
         const reportFId = findReport.id;
@@ -20,7 +18,6 @@ const reportInit = async (userinit) => {
         return await {}
         
     } catch (error) {
-        console.log(error);
         throw {error};
     }
 }

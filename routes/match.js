@@ -160,7 +160,6 @@ router.patch('/result', async (req, res) => {
     
     const findReport = await Match.findOne({ $and: [{ teams: { $in: [req.body.player] } }, { finished: false }] }).sort({ time: 'desc' });
     if (!findReport) { throw { error: "findReport" } };
-    console.log(findReport);
 
 
     // TEAM A REPORT --------------------------->

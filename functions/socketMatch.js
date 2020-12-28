@@ -115,7 +115,8 @@ const matchUpdate = async () => {
         }
 
         const newMatch = new Match({
-            teams: matchShuffle,
+            teams: arrayShuffle,
+            teamsobj: matchShuffle,
             finished: false,
             reported: "false",
             result: [0, 0],

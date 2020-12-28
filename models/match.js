@@ -5,6 +5,9 @@ const matchScheema = new mongoose.Schema({
         type: Array,
         require: true
     },
+    teamsobj: {
+        type: Array
+    },
     finished: {
         type: Boolean,
         require: true
