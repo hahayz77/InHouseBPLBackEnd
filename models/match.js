@@ -18,6 +18,9 @@ const matchScheema = new mongoose.Schema({
     preresult: {
         type: Object
     },
+    comp:{
+        type: Array
+    },
     time: {
         type: Date,
         default: Date.now,
