@@ -241,18 +241,94 @@ router.patch('/result', async (req, res) => {
       }
     }
 
+    // CALCULAR User Points --------------------------->
+
+    const calcPoints = preresultInt[0] - preresultInt[1];
+    var pointsObj = [];
+    for( i=0 ; i < 6 ; i++ ){
+      pointsObj.push(findReport.teamsobj[i].points);
+    }
+
+    calcPlayersA = pointsObj[0] + pointsObj[1] + pointsObj[2];
+    calcPlayersB = pointsObj[3] + pointsObj[4] + pointsObj[5]; 
+
+
+    if(calcPlayersA > calcPlayersB){
+        switch (calcPoints) {
+            case 5:                     // 5x0
+                pts_a = 6; pts_b = -6;           break;
+            case 4:                     // 5x1
+                pts_a = 5; pts_b = -5;           break;
+            case 3:                     // 5x2
+                pts_a = 4; pts_b = -4;           break;  
+            case 2:                     // 5x3
+                pts_a = 3; pts_b = -3;           break;
+            case 1:                    // 5x4
+                pts_a = 2; pts_b = -2;           break;  
+            case -1:                    // 4x5
+                pts_a = -2; pts_b = 2;           break;   
+            case -2:                    // 3x5
+                pts_a = -4; pts_b = 4;           break;
+            case -3:                    // 2x5
+                pts_a = -6; pts_b = 6;           break;
+            case -4:                    // 1x5
+                pts_a = -8; pts_b = 8;           break;
+            case -5:                    // 0x5
+                pts_a = -10; pts_b = 10;           break;
+            default:                    
+                pts_a = 0; pts_b = 0;
+          }
+      }
+
+    else if(calcPlayersA < calcPlayersB){ 
+      console.log("TEAMB");
+        switch (calcPoints) {
+            case -5:                     // 5x0
+                pts_b = 6; pts_a = -6;           break;
+            case -4:                     // 5x1
+                pts_b = 5; pts_a = -5;           break;
+            case -3:                     // 5x2
+                pts_b = 4; pts_a = -4;           break;  
+            case -2:                     // 5x3
+                pts_b = 3; pts_a = -3;           break;
+            case -1:                    // 5x4
+                pts_b = 2; pts_a = -2;           break;  
+            case 1:                    // 4x5
+                pts_b = -2; pts_a = 2;           break;   
+            case 2:                    // 3x5
+                pts_b = -4; pts_a = 4;           break;
+            case 3:                    // 2x5
+                pts_b = -6; pts_a = 6;           break;
+            case 4:                    // 1x5
+                pts_b = -8; pts_a = 8;           break;
+            case 5:                    // 0x5
+                pts_b = -10; pts_a = 10;           break;
+            default:                    
+                pts_b = 0; pts_a = 0;
+          }
+      }
+
+    else{
+        if (calcPoints >= 0){
+            pts_a = calcPoints;
+            pts_b = -calcPoints;
+        }
+        else {
+            pts_a = calcPoints;
+            pts_b = -calcPoints;        
+        }
+      } 
+
     // Set User Points --------------------------->
     var teamA = [], teamB = [];
     for(var i=0; i<3; i++){
       teamA.push(findReport.teams[i]);
       teamB.push(findReport.teams[i+3]);
     }
-
-    const calcPointsA = preresultInt[0] - preresultInt[1];
-    if(calcPointsA > 0){
+    if(pts_a > 0){
       const setUserPointsA = await User.updateMany({name: {$in: teamA}},{
         $inc: {
-           points: calcPointsA,
+           points: pts_a,
            wins: 1
         } 
       })
@@ -261,19 +337,17 @@ router.patch('/result', async (req, res) => {
     else{
       const setUserPointsA = await User.updateMany({name: {$in: teamA}},{
         $inc: {
-           points: calcPointsA,
+           points: pts_a,
            loses: 1
         } 
       })
       if(!setUserPointsA){throw {error: "Error Set User Points A"}}
     }
 
-
-    const calcPointsB = preresultInt[1] - preresultInt[0];
-    if(calcPointsB > 0){
+    if(pts_b > 0){
       const setUserPointsB = await User.updateMany({name: {$in: teamB}},{
         $inc: {
-           points: calcPointsB,
+           points: pts_b,
            wins: 1
         } 
       })
@@ -282,7 +356,7 @@ router.patch('/result', async (req, res) => {
     else{
       const setUserPointsB = await User.updateMany({name: {$in: teamB}},{
         $inc: {
-           points: calcPointsB,
+           points: pts_b,
            loses: 1
         } 
       })

@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const router = express.Router();
 const mongoose = require('mongoose')
 const User = require('../models/user');
+const Ranking = require('../models/ranking');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 
@@ -106,6 +107,32 @@ router.get('/ranking', async(req, res)=>{
       res.json({ error });
     }
 });
+
+router.post('/saveranking', async(req,res)=>{
+  try {
+    const newRanking = new Ranking({
+      name: req.body.name,
+      ranking: req.body.ranking,
+      date: req.body.date
+    });
+  
+    newRanking.save(function(err){
+      if (!err){
+          res.status(201).json({
+          mensagem: "Temporada salva com sucesso",
+          name: newRanking.name,
+          ranking: newRanking.ranking,
+          date: newRanking.date
+        });
+      }
+      else{
+        throw {error: err};
+      }
+    })
+  } catch (error) {
+    res.send(error);
+  }
+})
 
 router. get('/main/:id/:champion', async(req,res)=>{
     try {
