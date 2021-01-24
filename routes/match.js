@@ -26,6 +26,7 @@ router.post("/problem/", async (req,res) => {
     const report = req.body.report;
     const problem = req.body.problem;
     const players = [];
+    const emptyResult = [0,0];
 
     const findProblem = await Problem.findOne({ match_id: report.id });
     if(!findProblem){
@@ -39,8 +40,16 @@ router.post("/problem/", async (req,res) => {
         problem_result: false
       })
 
-      newProblem.save(function(err){
+      newProblem.save(async function(err){
         if (!err){
+            const updatePreREsult = await Match.updateOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] },
+              {
+                $set: {
+                  "preresult.teama": emptyResult,
+                  "preresult.teamb": emptyResult
+                }
+              })
+            if (!updatePreREsult) { throw { error: "emptyPreResultError1" } }
 
             res.status(201).json({
             mensagem: "Problema reportado, aguarde outro player!",
@@ -57,7 +66,15 @@ router.post("/problem/", async (req,res) => {
     } else{
       
         if(findProblem.problem_result === true){
-          
+          const updatePreREsult = await Match.updateOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] },
+            {
+              $set: {
+                "preresult.teama": emptyResult,
+                "preresult.teamb": emptyResult
+              }
+            })
+          if (!updatePreREsult) { throw { error: "emptyPreResultError2" } }
+
           res.status(201).json({
             mensagem: "Problema já havia sido reportado!",
             status: "problem_areadyreported"
@@ -90,13 +107,23 @@ router.post("/problem/", async (req,res) => {
           
         } else {
 
-          const problemUpdate = await Problem.updateOne({ match_id: report.id },
+          const problemUpdate = await Problem.updateOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] },
             {
               $set: {
                 problem_type: problem
               }
             })
             if(!problemUpdate){throw {error: "Error problemUpdate same player"}}
+
+            const updatePreREsult = await Match.updateOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] },
+              {
+                $set: {
+                  "preresult.teama": emptyResult,
+                  "preresult.teamb": emptyResult
+                }
+              })
+            if (!updatePreREsult) { throw { error: "emptyPreResultError3" } }
+
 
             res.status(200).json({
               mensagem: "Problema reportado novamente!",
@@ -377,15 +404,15 @@ router.patch('/result', async (req, res) => {
   }
 });
 
-// router.delete("/delete/all/298dhdko187762hhnnxoay0927", async (req, res) => {
-//   try {
-//     const deleteMatches = await Match.deleteMany({});
-//     res.status(200).send(await deleteMatches);
+router.delete("/delete/all/298dhdko187762hhnnxoay0927", async (req, res) => {
+  try {
+    const deleteMatches = await Match.deleteMany({});
+    res.status(200).send(await deleteMatches);
 
-//   } catch (err) {
-//     res.status(500).send("Erro ao deletar");
-//   }
-// })
+  } catch (err) {
+    res.status(500).send("Erro ao deletar");
+  }
+})
 
 // router.post("/setpoints", async(req, res)=>{
 //   try {
@@ -415,27 +442,27 @@ router.patch('/result', async (req, res) => {
 //   }
 // })
 
-// router.post("/resetall", async(req,res)=>{
-//   try {
-//     const setUserPoints = await User.updateMany({},{
-//       $set: {
-//          points: 0,
-//          wins: 0,
-//          loses: 0
-//       } 
-//     })
-//     if(!setUserPoints){throw {error: "User set points"}}
+router.post("/resetall", async(req,res)=>{
+  try {
+    const setUserPoints = await User.updateMany({},{
+      $set: {
+         points: 0,
+         wins: 0,
+         loses: 0
+      } 
+    })
+    if(!setUserPoints){throw {error: "User set points"}}
 
-//     res.status(200).json({
-//       status: "Reset Points",
-//       mensagem: setUserPoints
-//     })
-//   } catch (error) {
-//     res.status(500).json({
-//       status: "ERROR resetPoints",
-//       mensagem: error
-//     })
-//   }
-// })
+    res.status(200).json({
+      status: "Reset Points",
+      mensagem: setUserPoints
+    })
+  } catch (error) {
+    res.status(500).json({
+      status: "ERROR resetPoints",
+      mensagem: error
+    })
+  }
+})
 
 module.exports = router;

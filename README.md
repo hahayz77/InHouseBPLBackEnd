@@ -30,14 +30,12 @@
 - [x] Reportar erro na partida não finalizado;
 - [x] Retirar IDs da queue;
 - [x] Substituir name por objeto no emit do front end para fazer o matchmaking;
-- [ ] Peso da partida;
-- [ ] Jogadores com pontos negativos tem redução na subtração dos pontos para estimular a pontuação positiva no ranking;
+- [ ] Jogadores com pontos negativos tem redução na subtração dos pontos;
 - [x] Opções de Matchmaking -> trigger por resultados dos matches anteriores;
 - [ ] Colocar espaço para Títulos na DB;
 
 ### Problemas
 
 - Muita pontuação negativa no ranking;
-- Partidas desbalanceadas;
 
 
