@@ -32,7 +32,7 @@ const matchScheema = new mongoose.Schema({
     expire_at: {
         type: Date, 
         default: Date.now, 
-        expires: 259200
+        expires: 604800
     }
 })
 
