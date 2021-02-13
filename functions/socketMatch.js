@@ -114,6 +114,15 @@ const matchUpdate = async () => {
             arrayShuffle.push(matchShuffle[i].name);
         }
 
+        // Shuffle Maps
+        var maps = ["Blackstone Arena Day", "Dragon Garden Day", "Mount Araz Day", 
+                    "Orman Temple Day", "Daharin Battlegrounds Day", "Meriko Summit Day",
+                    "Blackstone Arena Night", "Dragon Garden Night", "Mount Araz Night", 
+                    "Orman Temple Night", "Daharin Battlegrounds Night", "Meriko Summit Night"];
+
+        const resultMap = maps[Math.floor(Math.random() * maps.length)];
+
+        // Create Match
         const newMatch = new Match({
             teams: arrayShuffle,
             teamsobj: matchShuffle,
@@ -121,7 +130,8 @@ const matchUpdate = async () => {
             reported: "false",
             result: [0, 0],
             preresult: {teama: [0,0], teamb: [0,0]},
-            comp: comp
+            comp: comp,
+            randomMap: resultMap
         });
 
         const saveMatch = await newMatch.save();

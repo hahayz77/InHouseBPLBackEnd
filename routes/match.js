@@ -98,7 +98,7 @@ router.post("/problem/", async (req, res) => {
                     })
                 if (!problemUpdate) { throw { error: "Error problemUpdate" } }
 
-                const deleteMatch = await Match.deleteOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] }).sort({ time: 'desc' });
+                const deleteMatch = await Match.deleteMany({ $and: [{ teams: { $in: [player] } }, { finished: false }] }).sort({ time: 'desc' });
                 if (!deleteMatch) { throw { error: "Error deleteMatch" } }
 
                 res.status(201).json({
@@ -355,7 +355,7 @@ router.patch('/result', async (req, res) => {
             teamA.push(findReport.teams[i]);
             teamB.push(findReport.teams[i + 3]);
         }
-        // TIME A VENCEU ->
+        // TIME A VENCEU ->        
         if (pts_a > 0) {
             const setUserPointsA = await User.updateMany({ name: { $in: teamA } }, {
                 $inc: {
@@ -527,6 +527,19 @@ router.patch('/result', async (req, res) => {
         })
     }
 });
+
+router.get("/historic", async (req,res)=>{
+    try {
+        const getHistoric = await Match.find({ finished: true }).sort({ time: 'desc' }).limit(20);
+        if(!getHistoric){throw {error: "Error getHistoric"}};
+        res.status(200).json({
+            mensagem: "Histórico de Partidas encontrado!",
+            historic: getHistoric
+        });
+    } catch (error) {
+        res.status(500).send("Error Historic Route!")
+    }
+})
 
 router.delete("/delete/all/298dhdko187762hhnnxoay0927", async (req, res) => {
     try {

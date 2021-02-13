@@ -21,8 +21,11 @@ const matchScheema = new mongoose.Schema({
     preresult: {
         type: Object
     },
-    comp:{
+    comp: {
         type: Array
+    },
+    randomMap: {
+        type: String
     },
     time: {
         type: Date,
