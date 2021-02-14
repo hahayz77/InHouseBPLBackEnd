@@ -118,31 +118,54 @@ router.get('/pastrankings/', async (req, res) => {
     }
 });
 
-// router.post('/saveranking', async(req,res)=>{
-//   try {
-//     const newRanking = new Ranking({
-//       name: req.body.name,
-//       ranking: req.body.ranking,
-//       date: req.body.date
-//     });
+router.post('/saveranking', async(req,res)=>{
+  try {
+    const newRanking = new Ranking({
+      name: req.body.name,
+      ranking: req.body.ranking,
+      date: req.body.date
+    });
 
-//     newRanking.save(function(err){
-//       if (!err){
-//           res.status(201).json({
-//           mensagem: "Temporada salva com sucesso",
-//           name: newRanking.name,
-//           ranking: newRanking.ranking,
-//           date: newRanking.date
-//         });
-//       }
-//       else{
-//         throw {error: err};
-//       }
-//     })
-//   } catch (error) {
-//     res.send(error);
-//   }
-// })
+    newRanking.save(function(err){
+      if (!err){
+          res.status(201).json({
+          mensagem: "Temporada salva com sucesso",
+          name: newRanking.name,
+          ranking: newRanking.ranking,
+          date: newRanking.date
+        });
+      }
+      else{
+        throw {error: err};
+      }
+    })
+  } catch (error) {
+    res.send(error);
+  }
+})
+
+router.post("/resetall", async (req, res) => {
+    try {
+        const setUserPoints = await User.updateMany({}, {
+            $set: {
+                points: 0,
+                wins: 0,
+                loses: 0
+            }
+        })
+        if (!setUserPoints) { throw { error: "User set points" } }
+
+        res.status(200).json({
+            status: "Reset Points",
+            mensagem: setUserPoints
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: "ERROR resetPoints",
+            mensagem: error
+        })
+    }
+})
 
 router.get('/main/:id/:champion', async (req, res) => {
     try {
