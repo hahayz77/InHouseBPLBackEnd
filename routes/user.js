@@ -110,9 +110,15 @@ router.get('/ranking', async (req, res) => {
 
 router.get('/pastrankings/', async (req, res) => {
     try {
+<<<<<<< HEAD
         const ranking = await Ranking.find({}).sort({ name: 'desc' });
         if (!ranking) { throw { error: "Error Ranking" } }
         res.json(ranking);
+=======
+      const ranking = await User.find({ $or: [ { wins: { $gt: 0 } }, { loses: { $gt: 0 } }  ] }, {_id: 0, name: 1, main: 1, points: 1, wins: 1, loses: 1}).sort({ points: 'desc' });
+      if(!ranking){throw {error: "Error Ranking"}}
+      res.json(ranking);
+>>>>>>> 64bd3c5082fade8069eb1975da24895012d92e57
     } catch (error) {
         res.json({ error });
     }
