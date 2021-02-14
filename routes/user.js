@@ -144,28 +144,28 @@ router.post('/saveranking', async(req,res)=>{
   }
 })
 
-router.post("/resetall", async (req, res) => {
-    try {
-        const setUserPoints = await User.updateMany({}, {
-            $set: {
-                points: 0,
-                wins: 0,
-                loses: 0
-            }
-        })
-        if (!setUserPoints) { throw { error: "User set points" } }
+// router.post("/resetall", async (req, res) => {
+//     try {
+//         const setUserPoints = await User.updateMany({}, {
+//             $set: {
+//                 points: 0,
+//                 wins: 0,
+//                 loses: 0
+//             }
+//         })
+//         if (!setUserPoints) { throw { error: "User set points" } }
 
-        res.status(200).json({
-            status: "Reset Points",
-            mensagem: setUserPoints
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: "ERROR resetPoints",
-            mensagem: error
-        })
-    }
-})
+//         res.status(200).json({
+//             status: "Reset Points",
+//             mensagem: setUserPoints
+//         })
+//     } catch (error) {
+//         res.status(500).json({
+//             status: "ERROR resetPoints",
+//             mensagem: error
+//         })
+//     }
+// })
 
 router.get('/main/:id/:champion', async (req, res) => {
     try {
