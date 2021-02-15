@@ -1,12 +1,14 @@
 const mongoose = require('../database/mongodb');
 
 const ProblemSchema = new mongoose.Schema({
-  players: {
-      type: Array
+  player: {
+      type: String
+  },
+  second_player:{
+    type: String
   },
   match_id: {
-    type: String,
-    unique: true
+    type: String
   },
   problem_type: {
       type: String

@@ -25,17 +25,16 @@ router.post("/problem/", async (req, res) => {
         const player = req.body.player;
         const report = req.body.report;
         const problem = req.body.problem;
-        const players = [];
         const emptyResult = [0, 0];
 
         // VERIFICAR REPORT PROBLEM
-        const findProblem = await Problem.findOne({ match_id: report.id });
+        const findProblem = await Problem.findOne({ $and: [ { match_id: report.id }, { problem_result: false } ] });
         // NÃO EXISTE UM PROBLEMA --------------------------->
         if (!findProblem) {
-            players.push(player);
 
             const newProblem = new Problem({
-                players: players,
+                player: player,
+                second_player: "none",
                 match_id: report.id,
                 teams: report.teams,
                 problem_type: problem,
@@ -64,36 +63,15 @@ router.post("/problem/", async (req, res) => {
 
                 }
             })
-
-        } else {
-            // JÁ EXISTE UM PROBLEMA --------------------------->
-            if (findProblem.problem_result === true) {
-                const updatePreREsult = await Match.updateOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] },
-                    {
-                        $set: {
-                            "preresult.teama": emptyResult,
-                            "preresult.teamb": emptyResult
-                        }
-                    })
-                if (!updatePreREsult) { throw { error: "emptyPreResultError2" } }
-
-                res.status(201).json({
-                    mensagem: "Problema já havia sido reportado!",
-                    status: "problem_areadyreported"
-                })
-                return;
-            }
+        } else {            
             // CONFIRMAÇÃO DO REPORT POR OUTRO PLAYER ->
-            if (player !== findProblem.players[0]) {
+            if (player !== findProblem.player) {
 
-                let final_players = findProblem.players;
-                final_players.push(player);
-
-                const problemUpdate = await Problem.updateOne({ match_id: report.id },
+                const problemUpdate = await Problem.updateMany({ $and: [ { match_id: report.id }, { problem_result: false } ] },
                     {
                         $set: {
                             problem_result: true,
-                            players: final_players
+                            second_player: player
                         }
                     })
                 if (!problemUpdate) { throw { error: "Error problemUpdate" } }
@@ -109,14 +87,6 @@ router.post("/problem/", async (req, res) => {
 
             } else {
                 // MESMO PLAYER REPORTANDO O PROBLEMA ->
-
-                const problemUpdate = await Problem.updateOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] },
-                    {
-                        $set: {
-                            problem_type: problem
-                        }
-                    })
-                if (!problemUpdate) { throw { error: "Error problemUpdate same player" } }
 
                 const updatePreREsult = await Match.updateOne({ $and: [{ teams: { $in: [player] } }, { finished: false }] },
                     {
