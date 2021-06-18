@@ -36,7 +36,6 @@ const matchUpdate = async () => {
         else if(matchCalc.length === 1){
             calcMatch_1 = Math.abs(matchCalc[0].result[0] - matchCalc[0].result[1]);
             pastMatch_1 = matchCalc[0].comp;
-            calcMatch_2 = 0;
             pastMatch_2 = [0,0,0,0,0,0];
         }
         else{
@@ -50,12 +49,12 @@ const matchUpdate = async () => {
         let matchShuffle = [];
 
         let comp = [];
-        let compsDif1 = [
+        let compsDif1 = [       // dif 1 com diferença de 1 entre os times
             [0,2,5,1,3,4],
             [0,3,5,1,2,4],
             [0,3,4,1,2,5]
         ];
-        let compsDif2 = [
+        let compsDif2 = [       // dif 2 com diferença > que 1 entre os times
             [0,1,5,2,3,4],
             [0,2,4,1,3,5],
             [1,2,3,0,4,5]
@@ -74,7 +73,7 @@ const matchUpdate = async () => {
         async function teamShuffle(){
             let ultMatch = calcMatch_1 + calcMatch_2;
 
-            if(ultMatch > 6){
+            if(ultMatch >= 5){
                 shuffle(compsDif1);
                 comp = compsDif1[0];
                 // dif1
@@ -100,7 +99,7 @@ const matchUpdate = async () => {
             }
         }
         
-        // Verificar comps de partidas anteriores
+        // Verificar comps repetidas de partidas anteriores
         let noRepeat = false;
         while(noRepeat === false){
             matchShuffle = await teamShuffle();
@@ -133,6 +132,10 @@ const matchUpdate = async () => {
             comp: comp,
             randomMap: resultMap
         });
+
+        // CORREÇÃO DO ERRO DAS PARTIDAS MULTIPLAS
+        const matchError = await Match.findOne({ $and: [ { teams: { $in: arrayShuffle } }, { finished: false } ] }).sort({time: 'desc'});
+        if(matchError){ throw {error : "Matcherror ERROR!"}};
 
         const saveMatch = await newMatch.save();
         if(!saveMatch){ throw { error: "Error SaveMatch"} };
