@@ -28,8 +28,7 @@ const queueUpdate = async (player) => {
             const newQueue = new Queue({
                 id: foundUser.id,
                 name: foundUser.name,
-                main: foundUser.main,
-                points: foundUser.points
+                main: foundUser.main
             })
 
             const findQueue = await Queue.findOne({ name: foundUser.name })

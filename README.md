@@ -33,6 +33,10 @@
 - [x] Jogadores com pontos negativos tem redução na subtração dos pontos;
 - [x] Opções de Matchmaking -> trigger por resultados dos matches anteriores;
 - [ ] Colocar espaço para Títulos na DB;
+- [x] Ocultar nomes dos players na fila;
+- [ ] Opção de Picks e Bans;
+- [ ] Inserir players no começo da fila ao cancelar match;
+- [x] Ocultar a Pontuação no ranking
 
 ### Problemas
 

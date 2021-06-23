@@ -102,6 +102,9 @@ router.get('/ranking', async (req, res) => {
     try {
         const ranking = await User.find({ $or: [{ wins: { $gt: 0 } }, { loses: { $gt: 0 } }] }, { _id: 0, name: 1, main: 1, points: 1, wins: 1, loses: 1 }).sort({ points: 'desc' });
         if (!ranking) { throw { error: "Error Ranking" } }
+        for (i in ranking){                 // DELETAR POINTS
+            ranking[i].points = undefined;
+        }
         res.json(ranking);
     } catch (error) {
         res.json({ error });

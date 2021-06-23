@@ -29,8 +29,7 @@ router.post('/', function(req, res){
     if(foundUser){
       const newQueue = new Queue({
         id: foundUser.id,
-        name: foundUser.name,
-        points: foundUser.points
+        name: foundUser.name
       });
       
       Queue.findOne({name: foundUser.name}, function(err, findQueue){
@@ -41,8 +40,7 @@ router.post('/', function(req, res){
                 if (!err){
                   res.status(200).json({
                     menssagem: "Entrou na fila!",
-                    name: newQueue.name,
-                    points: newQueue.points
+                    name: newQueue.name
                   })
                 } else {
                   res.status(500).send("Erro interno: queuePOST001" + err);
@@ -62,8 +60,7 @@ router.post('/', function(req, res){
             if (!err){
               res.status(200).json({
                 menssagem: "Entrou na fila!",
-                name: newQueue.name,
-                points: newQueue.points
+                name: newQueue.name
               })
             } else {
               res.status(500).send("Erro interno: queuePOST003" + err);
