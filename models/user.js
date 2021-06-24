@@ -19,6 +19,9 @@ const UserSchema = new mongoose.Schema({
   main: {
     type: String
   },
+  options: {
+    type: Array
+  },
   level: {
     type: String
   },
