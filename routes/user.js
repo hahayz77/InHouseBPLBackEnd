@@ -103,22 +103,22 @@ router.get('/ranking', async (req, res) => {
         const ranking = await User.find({ $or: [{ wins: { $gt: 0 } }, { loses: { $gt: 0 } }] }, { _id: 0, name: 1, main: 1, points: 1, wins: 1, loses: 1 }).sort({ points: 'desc' });
         if (!ranking) { throw { error: "Error Ranking" } }
         for (i in ranking){                 // RANKING TO TIERS !IMPORTANTE
-            if(ranking[i].points <= 0){
+            if(ranking[i].points <= -10){
                 ranking[i].points = 1;
             }
-            else if(ranking[i].points > 0 && ranking[i].points <= 50){
+            else if(ranking[i].points > -10 && ranking[i].points <= 0){
                 ranking[i].points = 2;
             }
-            else if(ranking[i].points > 50 && ranking[i].points <= 100){
+            else if(ranking[i].points > 0 && ranking[i].points <= 25){
                 ranking[i].points = 3;
             }
-            else if(ranking[i].points > 100 && ranking[i].points <= 150){
+            else if(ranking[i].points > 25 && ranking[i].points <= 75){
                 ranking[i].points = 4;
             }
-            else if(ranking[i].points > 150 && ranking[i].points <= 250){
+            else if(ranking[i].points > 75 && ranking[i].points <= 150){
                 ranking[i].points = 5;
             }
-            else if(ranking[i].points > 250){
+            else if(ranking[i].points > 150){
                 ranking[i].points = 6;
             }
         }
