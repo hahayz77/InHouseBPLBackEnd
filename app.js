@@ -76,10 +76,12 @@ io.on('connection', async (socket) => {
   socket.on('queueUpdate', async (player) => {
     try {
       const { count, queue } = await queueUpdate(player);
+      queue.name = undefined;
       io.emit('queueUpdate', queue);
 
       if(await count >= 6){
         const { queueRes, matchRes, reportRes } = await matchUpdate();
+        queueRes.name = undefined;
         io.emit('queueUpdate', queueRes);
         io.emit('matchUpdate', matchRes);
         io.emit('reportUpdate', reportRes);

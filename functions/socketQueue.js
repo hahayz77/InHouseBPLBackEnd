@@ -38,7 +38,6 @@ const queueUpdate = async (player) => {
             const newSave = await newQueue.save();
             if(!newSave){ throw { error } };
 
-            console.log(newQueue.name + " entrou na fila!");
 
             const count = await Queue.countDocuments();
             const queue = await Queue.find();
@@ -56,7 +55,6 @@ const queueDelete = async (playerId) => {
     try {
         const deleteQueue = await Queue.deleteOne({ id: playerId });
         if (!deleteQueue) { throw {error: "NoUser"}}
-        console.log(playerId + " saiu da fila!");
         
         const queue = await Queue.find({})
         return await queue;
