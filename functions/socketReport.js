@@ -22,16 +22,4 @@ const reportInit = async (userinit) => {
     }
 }
 
-
-// const resultReport = async (report) => { //{ selectTeamA: '4', selectTeamB: '5', selectProblem: 'Player inativo' E selectUser: $USER STORE }
-//     // const user = report.selectUser;
-//     // const teamA = selectTeamA;
-//     // const teamB = selectTeamB;
-//     //PAREI AQUI
-//     console.log("FIND REPORT -------------------"); console.log(report);
-//     // console.log(selectTeamA);
-//     // console.log(selectTeamB)
-//     return report;
-// }
-
 module.exports = { reportInit };

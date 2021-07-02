@@ -6,7 +6,7 @@ const Match = require('../models/match');
 
 const queueInit = async () => {
     try {
-        const findQueue = await Queue.find()
+        const findQueue = await Queue.find({}, { id: 0, _id: 1, name: 0, main: 0});
         return await findQueue;
     } catch (error) {
         throw { error };
@@ -40,7 +40,7 @@ const queueUpdate = async (player) => {
 
 
             const count = await Queue.countDocuments();
-            const queue = await Queue.find();
+            const queue = await Queue.find({}, { id: 0, _id: 1, name: 0, main: 0});
             return { count, queue };
         }
         
@@ -56,7 +56,7 @@ const queueDelete = async (playerId) => {
         const deleteQueue = await Queue.deleteOne({ id: playerId });
         if (!deleteQueue) { throw {error: "NoUser"}}
         
-        const queue = await Queue.find({})
+        const queue = await Queue.find({}, { id: 0, _id: 1, name: 0, main: 0})
         return await queue;
 
     } catch (error) {
