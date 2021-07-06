@@ -4,8 +4,11 @@ const router = express.Router();
 const mongoose = require('mongoose')
 const User = require('../models/user');
 const Ranking = require('../models/ranking');
+const ResetPassword = require('../models/resetPassword');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 router.use(bodyParser.json());
 router.use(cors());
@@ -96,7 +99,85 @@ router.post('/login', function (req, res) {
             res.status(400).json({ mensagem: "Usuário incorreto!" });
         }
     })
-})
+});
+
+
+router.post("/forgotpassword/codegenerate", async function (req, res){
+    try{
+        const findEmail = await User.findOne({ email: req.body.email });
+        if(!findEmail){ throw { error: "Error 001 - usermail" }}
+        else{ 
+            const findResetPass = await ResetPassword.findOne({ email: req.body.email });
+            if(findResetPass){ throw { error: "Error 002 - resetAgain" } };
+            let code = [0,0,0,0,0,0];
+            for (i in code){
+                code[i] = Math.floor(Math.random() * 10);
+            }
+
+            const newResetPassword = new ResetPassword({
+                email: req.body.email,
+                code: code
+            });
+
+            newResetPassword.save(function (err) {
+                if(err){ throw { error: "Error 003 - save usermail" } };
+
+                var transporter = nodemailer.createTransport({
+                    host: 'smtp.zoho.com',
+                    port: 587,
+                    secure: false, //ssl
+                    auth: {
+                            user: 'contato@battleritebrasil.com',
+                            pass: "qLDfjy36A12H"
+                    }
+                });
+
+                let finalCode = code.join(" - ");
+
+                  const configs = {
+                    from: 'contato@battleritebrasil.com',
+                    to: req.body.email,
+                    subject: 'E-mail enviado usando Node!',
+                    html: "<h2>Seu código para resetar a senha é</h2>"+ "<br>" + "<h4>"+ finalCode + "</h4>"
+                  };
+
+
+                  transporter.sendMail(configs, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email enviado: ' + info.response);
+                    }
+                  });
+                  
+                res.status(200).json({ mensagem: "Confirme o código enviado para o seu email: " + findEmail.email })
+            });
+        };
+
+    }catch(error){
+        if (error.error === "Error 002 - resetAgain"){
+            res.status(200).json({
+                mensagem: "O código já foi enviado para o email! Aguarde 30 minutos para enviar outro novamente"
+            });
+        }
+        else if(error.error === "Error 001 - usermail"){
+            res.status(404).json({mensagem: "Usuário não encontrado na base de dados!"});
+        }
+        else{
+            res.status(500).json({mensagem: "Erro interno usercodegenerate!"});
+        }
+    }
+});
+
+router.post("/forgotpassword/codeconfirmation/:code", async function (req, res){
+    try{
+        const code = req.params.code;
+        res.status(200).json({mensagem: "Código "+ code +" confirmado"})
+
+    }catch(error){
+        res.status(500).json({mensagem: "Usuário não encontrado na base de dados!"})
+    }
+});
 
 router.get('/ranking', async (req, res) => {
     try {

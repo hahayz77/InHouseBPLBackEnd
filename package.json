@@ -16,7 +16,8 @@
     "dotenv": "^8.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "mongoose": "^5.10.11",
-    "socket.io": "^2.3.0"
+    "mongoose": "^5.13.2",
+    "nodemailer": "^6.6.2",
+    "socket.io": "^2.4.1"
   }
 }
