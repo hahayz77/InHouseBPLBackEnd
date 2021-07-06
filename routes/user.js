@@ -128,7 +128,7 @@ router.post("/forgotpassword/codegenerate", async function (req, res){
                     secure: false, //ssl
                     auth: {
                             user: 'contato@battleritebrasil.com',
-                            pass: "qLDfjy36A12H"
+                            pass: process.env.MAIL_PASS
                     }
                 });
 
