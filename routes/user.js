@@ -133,6 +133,7 @@ router.post("/forgotpassword/codegenerate", async function (req, res){
                 });
 
                 let finalCode = code.join(" - ");
+                
 
                   const configs = {
                     from: 'contato@battleritebrasil.com',
