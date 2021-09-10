@@ -256,25 +256,25 @@ router.patch('/result', async (req, res) => {
         if (calcPlayersA > calcPlayersB) {
             switch (calcPoints) {
                 case 5:                     // 5x0
-                    pts_a = 6; pts_b = -6; break;
+                    pts_a = 1; pts_b = 0; break;
                 case 4:                     // 5x1
-                    pts_a = 5; pts_b = -5; break;
+                    pts_a = 1; pts_b = 0; break;
                 case 3:                     // 5x2
-                    pts_a = 4; pts_b = -4; break;
+                    pts_a = 2; pts_b = 0; break;
                 case 2:                     // 5x3
-                    pts_a = 3; pts_b = -3; break;
+                    pts_a = 2; pts_b = -1; break;
                 case 1:                    // 5x4
-                    pts_a = 2; pts_b = -2; break;
+                    pts_a = 3; pts_b = -1; break;
                 case -1:                    // 4x5
-                    pts_a = -2; pts_b = 2; break;
+                    pts_a = -1; pts_b = 4; break;
                 case -2:                    // 3x5
-                    pts_a = -4; pts_b = 4; break;
+                    pts_a = -1; pts_b = 3; break;
                 case -3:                    // 2x5
-                    pts_a = -6; pts_b = 6; break;
+                    pts_a = 0; pts_b = 3; break;
                 case -4:                    // 1x5
-                    pts_a = -8; pts_b = 8; break;
+                    pts_a = 0; pts_b = 2; break;
                 case -5:                    // 0x5
-                    pts_a = -10; pts_b = 10; break;
+                    pts_a = 0; pts_b = 1; break;
                 default:
                     pts_a = 0; pts_b = 0;
             }
@@ -283,25 +283,25 @@ router.patch('/result', async (req, res) => {
         else if (calcPlayersB > calcPlayersA) {
             switch (calcPoints) {
                 case -5:                     // 5x0
-                    pts_b = 6; pts_a = -6; break;
+                    pts_b = 1; pts_a = 0; break;
                 case -4:                     // 5x1
-                    pts_b = 5; pts_a = -5; break;
+                    pts_b = 1; pts_a = 0; break;
                 case -3:                     // 5x2
-                    pts_b = 4; pts_a = -4; break;
+                    pts_b = 2; pts_a = 0; break;
                 case -2:                     // 5x3
-                    pts_b = 3; pts_a = -3; break;
+                    pts_b = 2; pts_a = -1; break;
                 case -1:                    // 5x4
-                    pts_b = 2; pts_a = -2; break;
+                    pts_b = 3; pts_a = -1; break;
                 case 1:                    // 4x5
-                    pts_b = -2; pts_a = 2; break;
+                    pts_b = -1; pts_a = 4; break;
                 case 2:                    // 3x5
-                    pts_b = -4; pts_a = 4; break;
+                    pts_b = -1; pts_a = 3; break;
                 case 3:                    // 2x5
-                    pts_b = -6; pts_a = 6; break;
+                    pts_b = 0; pts_a = 3; break;
                 case 4:                    // 1x5
-                    pts_b = -8; pts_a = 8; break;
+                    pts_b = 0; pts_a = 2; break;
                 case 5:                    // 0x5
-                    pts_b = -10; pts_a = 10; break;
+                    pts_b = 0; pts_a = 1; break;
                 default:
                     pts_b = 0; pts_a = 0;
             }

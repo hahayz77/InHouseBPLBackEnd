@@ -22,60 +22,60 @@ router.use(cors());
 
 // });
 
-// router.post('/', function(req, res){
-//   const name = req.body.name;
+router.post('/', function(req, res){
+  const name = req.body.name;
   
-//   User.findOne({name: name}, function(err, foundUser){  
-//     if(foundUser){
-//       const newQueue = new Queue({
-//         id: foundUser.id,
-//         name: foundUser.name
-//       });
+  User.findOne({name: name}, function(err, foundUser){  
+    if(foundUser){
+      const newQueue = new Queue({
+        id: foundUser.id,
+        name: foundUser.name
+      });
       
-//       Queue.findOne({name: foundUser.name}, function(err, findQueue){
-//         if(findQueue){
-//           Queue.deleteOne({name: foundUser.name}, function(err, result){
-//             if (result){
-//               newQueue.save(function(err){
-//                 if (!err){
-//                   res.status(200).json({
-//                     menssagem: "Entrou na fila!"
-//                   })
-//                 } else {
-//                   res.status(500).send("Erro interno: queuePOST001" + err);
-//                 }
-//               })
-//             }
-//             else{
-//               res.status(500).send(err);
-//             }
-//           })
-//         }
-//         else if(err){
-//           res.status(500).send("Erro interno: queuePOST002" + err);
-//         }
-//         else{
-//           newQueue.save(function(err){
-//             if (!err){
-//               res.status(200).json({
-//                 menssagem: "Entrou na fila!"
-//               })
-//             } else {
-//               res.status(500).send("Erro interno: queuePOST003" + err);
-//             }
-//           })
-//         }
-//       });
-//     }
-//     else if(err){
-//       res.status(500).send("Erro interno: queuePOST003" + err);
-//     }
-//     else{
-//       res.status(400).send("Usuário não encontrado")
-//     }
+      Queue.findOne({name: foundUser.name}, function(err, findQueue){
+        if(findQueue){
+          Queue.deleteOne({name: foundUser.name}, function(err, result){
+            if (result){
+              newQueue.save(function(err){
+                if (!err){
+                  res.status(200).json({
+                    menssagem: "Entrou na fila!"
+                  })
+                } else {
+                  res.status(500).send("Erro interno: queuePOST001" + err);
+                }
+              })
+            }
+            else{
+              res.status(500).send(err);
+            }
+          })
+        }
+        else if(err){
+          res.status(500).send("Erro interno: queuePOST002" + err);
+        }
+        else{
+          newQueue.save(function(err){
+            if (!err){
+              res.status(200).json({
+                menssagem: "Entrou na fila!"
+              })
+            } else {
+              res.status(500).send("Erro interno: queuePOST003" + err);
+            }
+          })
+        }
+      });
+    }
+    else if(err){
+      res.status(500).send("Erro interno: queuePOST003" + err);
+    }
+    else{
+      res.status(400).send("Usuário não encontrado")
+    }
 
-//   })
-// })
+  })
+})
 
 
 router.delete('/one/:name', function(req, res){
