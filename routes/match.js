@@ -326,19 +326,20 @@ router.patch('/result', async (req, res) => {
             teamB.push(findReport.teams[i + 3]);
         }
         // TIME A VENCEU ->        
-        if (pts_a > 0) {
+        if (pts_a >= 0) {
             const setUserPointsA = await User.updateMany({ name: { $in: teamA } }, {
                 $inc: {
                     points: pts_a,
                     wins: 1
                 }
             })
+            console.log("PTsA= "+pts_a);
             if (!setUserPointsA) { throw { error: "Error Set User Points A" } }
         }
         // TIME A PERDEU ->
         else {
             // PLAYER A1 [0]
-            if (pointsObj[0] > 0) {
+            if (pointsObj[0] >= 0) {
                 const setUserPointsA1 = await User.updateMany({ name: teamA[0] }, {
                     $inc: {
                         points: pts_a,
@@ -358,9 +359,10 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsA1) { throw { error: "Error Set User Points A12" } }
 
             }
+            console.log("PTsA1= "+pts_a + " | " +pts_a1);
 
             // PLAYER A2 [1]
-            if (pointsObj[1] > 0) {
+            if (pointsObj[1] >= 0) {
                 const setUserPointsA2 = await User.updateMany({ name: teamA[1] }, {
                     $inc: {
                         points: pts_a,
@@ -380,9 +382,10 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsA2) { throw { error: "Error Set User Points A22" } }
 
             }
+            console.log("PTsA2= "+pts_a + " | " +pts_a2);
 
             // PLAYER A3 [2]
-            if (pointsObj[2] > 0) {
+            if (pointsObj[2] >= 0) {
                 const setUserPointsA3 = await User.updateMany({ name: teamA[2] }, {
                     $inc: {
                         points: pts_a,
@@ -402,23 +405,25 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsA3) { throw { error: "Error Set User Points A32" } }
 
             }
+            console.log("PTsA3= "+pts_a + " | " +pts_a3);
 
         }
         // TIME B VENCEU ->
-        if (pts_b > 0) {
+        if (pts_b >= 0) {
             const setUserPointsB = await User.updateMany({ name: { $in: teamB } }, {
                 $inc: {
                     points: pts_b,
                     wins: 1
                 }
             })
+            console.log("PTsB= "+pts_b);
             if (!setUserPointsB) { throw { error: "Error Set User Points B" } }
         }
-        // TIME B PERDEU ->
 
+        // TIME B PERDEU ->
         else {
             // PLAYER B1 [3]
-            if (pointsObj[3] > 0) {
+            if (pointsObj[3] >= 0) {
                 const setUserPointsB1 = await User.updateMany({ name: teamB[0] }, {
                     $inc: {
                         points: pts_b,
@@ -438,9 +443,10 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsB1) { throw { error: "Error Set User Points B12" } }
 
             }
+            console.log("PTsB1= "+pts_b + " | " +pts_b1);
 
-            // PLAYER A2 [4]
-            if (pointsObj[4] > 0) {
+            // PLAYER B2 [4]
+            if (pointsObj[4] >= 0) {
                 const setUserPointsB2 = await User.updateMany({ name: teamB[1] }, {
                     $inc: {
                         points: pts_b,
@@ -460,9 +466,10 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsB2) { throw { error: "Error Set User Points B22" } }
 
             }
+            console.log("PTsB2= "+pts_b + " | " +pts_b2);
 
             // PLAYER B3 [5]
-            if (pointsObj[5] > 0) {
+            if (pointsObj[5] >= 0) {
                 const setUserPointsB3 = await User.updateMany({ name: teamB[2] }, {
                     $inc: {
                         points: pts_b,
@@ -482,6 +489,7 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsB3) { throw { error: "Error Set User Points B32" } }
 
             }
+            console.log("PTsB3= "+pts_b + " | " +pts_b3);
 
         }
 

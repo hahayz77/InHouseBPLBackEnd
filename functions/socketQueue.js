@@ -41,6 +41,7 @@ const queueUpdate = async (player) => {
 
             const count = await Queue.countDocuments();
             const queue = await Queue.find({}, { id: 0, _id: 1, name: 0, main: 0});
+            console.log(queue);
             return { count, queue };
         }
         
