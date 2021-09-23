@@ -117,7 +117,8 @@ const matchUpdate = async () => {
         var maps = ["Blackstone Arena Day", "Dragon Garden Day", "Mount Araz Day", 
                     "Orman Temple Day", "Daharin Battlegrounds Day", "Meriko Summit Day",
                     "Blackstone Arena Night", "Dragon Garden Night", "Mount Araz Night", 
-                    "Orman Temple Night", "Daharin Battlegrounds Night", "Meriko Summit Night"];
+                    "Orman Temple Night", "Daharin Battlegrounds Night", "Meriko Summit Night",
+                    "Sky Ring Day", "Sky Ring Night","Misty Woods Day", "Misty Woods Night"];
 
         const resultMap = maps[Math.floor(Math.random() * maps.length)];
 
