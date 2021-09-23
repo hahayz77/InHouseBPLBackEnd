@@ -18,7 +18,6 @@ const matchUpdate = async () => {
     try {
         const players = await Queue.find({}).sort({points: 'asc'}).limit(6);
         if(!players){ throw {error : "Find Error!"}};
-        console.log(players);
 
         let calcMatch_1 = 5;
         let calcMatch_2 = 5;
@@ -107,7 +106,6 @@ const matchUpdate = async () => {
             if(comp !== pastMatch_1 && comp !== pastMatch_2){
                 noRepeat = true;
             }
-            console.log(matchShuffle);
         };
 
         // arrayShuffle -> Mongodb

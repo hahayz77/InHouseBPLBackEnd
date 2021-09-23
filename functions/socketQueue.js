@@ -6,7 +6,7 @@ const Match = require('../models/match');
 
 const queueInit = async () => {
     try {
-        const findQueue = await Queue.find({}, { id: 0, _id: 1, name: 0, main: 0});
+        const findQueue = await Queue.find({}, { id: 0, name: 0, main: 0});
         return await findQueue;
     } catch (error) {
         throw { error };
@@ -20,6 +20,7 @@ const queueUpdate = async (player) => {
             throw {error: "Você ainda tem uma partida em andamento!"};
         }
         else{
+            // let keyPoints = 57;
             const foundUser = await User.findOne({ name: player });
                 if (!foundUser) {
                 console.log("Usuário não encontrado");
@@ -28,8 +29,9 @@ const queueUpdate = async (player) => {
             const newQueue = new Queue({
                 id: foundUser.id,
                 name: foundUser.name,
-                main: foundUser.main
-            })
+                main: foundUser.main,
+                points: foundUser.points,
+            });
 
             const findQueue = await Queue.findOne({ name: foundUser.name })
             if (findQueue) {
@@ -38,10 +40,8 @@ const queueUpdate = async (player) => {
             const newSave = await newQueue.save();
             if(!newSave){ throw { error } };
 
-
             const count = await Queue.countDocuments();
-            const queue = await Queue.find({}, { id: 0, _id: 1, name: 0, main: 0});
-            console.log(queue);
+            const queue = await Queue.find({}, { id: 0, name: 0, main: 0});
             return { count, queue };
         }
         
@@ -57,7 +57,7 @@ const queueDelete = async (playerId) => {
         const deleteQueue = await Queue.deleteOne({ id: playerId });
         if (!deleteQueue) { throw {error: "NoUser"}}
         
-        const queue = await Queue.find({}, { id: 0, _id: 1, name: 0, main: 0})
+        const queue = await Queue.find({}, { id: 0, name: 0, main: 0})
         return await queue;
 
     } catch (error) {

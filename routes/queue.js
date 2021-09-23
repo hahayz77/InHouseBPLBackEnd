@@ -29,8 +29,10 @@ router.post('/', function(req, res){
     if(foundUser){
       const newQueue = new Queue({
         id: foundUser.id,
-        name: foundUser.name
-      });
+        name: foundUser.name,
+        main: foundUser.main,
+        points: foundUser.points,
+    });
       
       Queue.findOne({name: foundUser.name}, function(err, findQueue){
         if(findQueue){

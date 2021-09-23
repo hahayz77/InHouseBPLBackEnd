@@ -319,7 +319,7 @@ router.patch('/result', async (req, res) => {
         }
 
         // SET USER POINTS --------------------------->
-        const lessPoints = 5;
+        const lessPoints = 1;
         var teamA = [], teamB = [];
         for (var i = 0; i < 3; i++) {
             teamA.push(findReport.teams[i]);
@@ -333,7 +333,7 @@ router.patch('/result', async (req, res) => {
                     wins: 1
                 }
             })
-            console.log("PTsA= "+pts_a);
+            // console.log("PTsA= "+pts_a);
             if (!setUserPointsA) { throw { error: "Error Set User Points A" } }
         }
         // TIME A PERDEU ->
@@ -359,7 +359,7 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsA1) { throw { error: "Error Set User Points A12" } }
 
             }
-            console.log("PTsA1= "+pts_a + " | " +pts_a1);
+            // console.log("PTsA1= "+ pts_a + " | " +pts_a1 + " -- " + pointsObj[0]);
 
             // PLAYER A2 [1]
             if (pointsObj[1] >= 0) {
@@ -382,7 +382,7 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsA2) { throw { error: "Error Set User Points A22" } }
 
             }
-            console.log("PTsA2= "+pts_a + " | " +pts_a2);
+            // console.log("PTsA2= "+pts_a + " | " +pts_a2 + " -- " + pointsObj[1]);
 
             // PLAYER A3 [2]
             if (pointsObj[2] >= 0) {
@@ -405,7 +405,7 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsA3) { throw { error: "Error Set User Points A32" } }
 
             }
-            console.log("PTsA3= "+pts_a + " | " +pts_a3);
+            // console.log("PTsA3= "+pts_a + " | " +pts_a3 + " -- " + pointsObj[2]);
 
         }
         // TIME B VENCEU ->
@@ -416,7 +416,7 @@ router.patch('/result', async (req, res) => {
                     wins: 1
                 }
             })
-            console.log("PTsB= "+pts_b);
+            // console.log("PTsB= "+pts_b);
             if (!setUserPointsB) { throw { error: "Error Set User Points B" } }
         }
 
@@ -443,7 +443,7 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsB1) { throw { error: "Error Set User Points B12" } }
 
             }
-            console.log("PTsB1= "+pts_b + " | " +pts_b1);
+            // console.log("PTsB1= "+pts_b + " | " +pts_b1 + " -- " + pointsObj[3]);
 
             // PLAYER B2 [4]
             if (pointsObj[4] >= 0) {
@@ -466,7 +466,7 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsB2) { throw { error: "Error Set User Points B22" } }
 
             }
-            console.log("PTsB2= "+pts_b + " | " +pts_b2);
+            // console.log("PTsB2= "+pts_b + " | " +pts_b2 + " -- " + pointsObj[4]);
 
             // PLAYER B3 [5]
             if (pointsObj[5] >= 0) {
@@ -489,7 +489,7 @@ router.patch('/result', async (req, res) => {
                 if (!setUserPointsB3) { throw { error: "Error Set User Points B32" } }
 
             }
-            console.log("PTsB3= "+pts_b + " | " +pts_b3);
+            // console.log("PTsB3= "+pts_b + " | " +pts_b3 + " -- " + pointsObj[5]);
 
         }
 

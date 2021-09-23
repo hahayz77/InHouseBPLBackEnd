@@ -12,6 +12,9 @@ const QueueSchema = new mongoose.Schema({
   },
   main: {
     type: String
+  },  
+  points: {
+    type: Number
   },
   time: {
       type: Date,
