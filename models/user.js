@@ -34,6 +34,9 @@ const UserSchema = new mongoose.Schema({
   points: {
       type: Number,
   },
+  userbans: {
+      type: Object,
+  },
   time: {
     type: Date,
     default: Date.now

@@ -188,19 +188,19 @@ router.get('/ranking', async (req, res) => {
             if(ranking[i].points <= -10){
                 ranking[i].points = 1;
             }
-            else if(ranking[i].points > -10 && ranking[i].points <= 0){
+            else if(ranking[i].points > -10 && ranking[i].points <= 25){
                 ranking[i].points = 2;
             }
-            else if(ranking[i].points > 0 && ranking[i].points <= 25){
+            else if(ranking[i].points > 25 && ranking[i].points <= 100){
                 ranking[i].points = 3;
             }
-            else if(ranking[i].points > 25 && ranking[i].points <= 75){
+            else if(ranking[i].points > 100 && ranking[i].points <= 250){
                 ranking[i].points = 4;
             }
-            else if(ranking[i].points > 75 && ranking[i].points <= 150){
+            else if(ranking[i].points > 250 && ranking[i].points <= 375){
                 ranking[i].points = 5;
             }
-            else if(ranking[i].points > 150){
+            else if(ranking[i].points > 375){
                 ranking[i].points = 6;
             }
         }
@@ -296,5 +296,16 @@ router.get('/main/:id/:champion', async (req, res) => {
         });
     }
 });
+
+// router.get("/bans",async (req, res) => {
+//     try{
+//         bansArray = req.body.bansArr;
+
+//     } 
+//     catch(err){
+
+//     }
+
+// })
 
 module.exports = router;
