@@ -24,6 +24,9 @@ const matchScheema = new mongoose.Schema({
     comp: {
         type: Array
     },
+    event: {
+        type: Object
+    },
     randomMap: {
         type: String
     },

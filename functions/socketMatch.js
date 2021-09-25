@@ -122,6 +122,23 @@ const matchUpdate = async () => {
 
         const resultMap = maps[Math.floor(Math.random() * maps.length)];
 
+
+        // Shuffle BANS
+        let bansMelees = ["Bakko", "Croak", "Freya", "Jamila", "Raigon", "Rook", "Ruh-Kaan", "Shifu", "Thorn"];
+        let bansRangeds = ["Alysia", "Ashka", "Destiny", "Ezmo", "Iva", "Jade", "Jumong", "Shen-Rao", "Taya", "Varesh"];
+        let bansSupports = ["Blossom", "Lucie", "Oldur", "Pearl", "Pestilus", "Poloma", "Sirius", "Ulric", "Zander"];
+
+        shuffle(bansMelees);
+        shuffle(bansRangeds);
+        shuffle(bansSupports);
+
+
+        let event = { bans:[
+            bansMelees[0],bansMelees[1], bansMelees[2],
+            bansRangeds[0],bansRangeds[1], bansRangeds[2],
+            bansSupports[0],bansSupports[1], bansSupports[2]
+        ]};
+        
         // Create Match
         const newMatch = new Match({
             teams: arrayShuffle,
@@ -131,6 +148,7 @@ const matchUpdate = async () => {
             result: [0, 0],
             preresult: {teama: [0,0], teamb: [0,0]},
             comp: comp,
+            event: event,
             randomMap: resultMap
         });
 
