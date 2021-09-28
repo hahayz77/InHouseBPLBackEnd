@@ -326,7 +326,7 @@ router.patch('/result', async (req, res) => {
             teamB.push(findReport.teams[i + 3]);
         }
         // TIME A VENCEU ->        
-        if (pts_a >= 0) {
+        if (calcPoints > 0) {
             const setUserPointsA = await User.updateMany({ name: { $in: teamA } }, {
                 $inc: {
                     points: pts_a,
@@ -409,7 +409,7 @@ router.patch('/result', async (req, res) => {
 
         }
         // TIME B VENCEU ->
-        if (pts_b >= 0) {
+        if (calcPoints < 0) {
             const setUserPointsB = await User.updateMany({ name: { $in: teamB } }, {
                 $inc: {
                     points: pts_b,
