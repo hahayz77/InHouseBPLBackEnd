@@ -77,17 +77,23 @@ io.on('connection', async (socket) => {
     try {
       const { count, queue } = await queueUpdate(player);
       io.emit('queueUpdate', queue);
-
+      
       if(await count >= 6){
         const { queueRes, matchRes, reportRes } = await matchUpdate();
         io.emit('queueUpdate', queueRes);
         io.emit('matchUpdate', matchRes);
         io.emit('reportUpdate', reportRes);
+        
       }
       return;
     } catch (error) {
       console.log(error);
     }
+  })
+
+  socket.on('match', async (event) => {
+    socket.join("some room");
+    io.to("some room").emit("hi");
   })
 })
 
