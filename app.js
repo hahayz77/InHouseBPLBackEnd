@@ -91,10 +91,10 @@ io.on('connection', async (socket) => {
     }
   })
 
-  socket.on('match', async (event) => {
-    socket.join("some room");
-    io.to("some room").emit("hi");
-  })
+  // socket.on('match', async (event) => {
+  //   socket.join("some room");
+  //   io.to("some room").emit("hi");
+  // })
 })
 
 
