@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 });
 
 
-var PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 8081;
 
 // ####################################################### ROUTES
 
